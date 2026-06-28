@@ -6,6 +6,7 @@ This lab introduces the core concepts of conditional frequency distributions (CF
 
 Conditional frequency distributions are a way to count frequencies of items (like words) conditioned on some other variable (like genre, part of speech, etc.).
 In NLTK, we can create a CFD using the 'nltk.ConditionalFreqDist' class.
+
 '''
 
 import nltk
