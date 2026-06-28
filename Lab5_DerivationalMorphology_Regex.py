@@ -7,6 +7,7 @@ This lab explores how Python can be used to identify and extract morphological p
 Derivational morphology is the study of how words are formed through the addition of affixes.
 In Python, these are expressed with regular expressions (regex) and the 're' module.
 
+Another test, can you read this?
 '''
 
 import re
