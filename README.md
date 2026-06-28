@@ -1,5 +1,5 @@
 ## computational-linguistics-labs
-Labs and coursework from LING 498: Computational Methods in Linguistics
+Labs and coursework from LING 498: Computational Methods in Linguistics, Concordia University, Winter 2026.
 ## Labs
 
 | Lab | Topic |
