@@ -9,7 +9,6 @@ In NLTK, we can create a CFD using the 'nltk.ConditionalFreqDist' class.
 '''
 
 import nltk
-import math
 from nltk import FreqDist, ConditionalFreqDist
 from nltk.corpus import brown
 import matplotlib
@@ -360,3 +359,13 @@ plot_robot_counts(
     genres=brown.categories(),
     title="Robot-related Words Across Brown Corpus Genres"
 )
+
+'''
+Step 4 — Interpret:
+
+The results did not support my original hypothesis. Although I expected science fiction to contain the highest number of robot-related words, 
+the learned and government genres contained many more occurrences. This is because most of the matches came from words such as "machine", "artificial", and "intelligence", 
+which are often used in scientific, technical, or political contexts rather than to describe robots. 
+
+In addition, the Brown corpus was compiled in the 1960s, before modern AI and robotics vocabulary became common in science fiction so it's not surprising that the science fiction genre did not contain many robot-related words.
+'''
