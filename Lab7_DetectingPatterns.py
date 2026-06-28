@@ -12,8 +12,8 @@ By the end of this lab you will be able to:
     2. Compute and visualize conditional distributions across two features
     3. Critically evaluate whether an observed pattern supports a linguistic theory
     4. Identify at least one limitation of the data that affects interpretation
-
 '''
+
 
 # ======================================================
 # Part 1 — From Counts to Questions
@@ -169,17 +169,15 @@ Interpretation:
 *   Are there any word orders that seem to *not* follow the pattern? What might that mean?
 *   This is a *correlation* between two typological features. What would it take to explain *why* they go together?
 
-Answer: 
-*   SOV languages tend to use postpositions, and SVO languages tend to use prepositions, which matches Greenberg’s prediction.
-*   Other word orders like VSO or OSV are more mixed and don’t follow the pattern as clearly, which shows it’s not a strict rule but more of a tendency.
-*   I believe the only way to explain why they go together would require more data and evidence as a correlation is not enough.
+SOV languages tend to use postpositions, and SVO languages tend to use prepositions, which matches Greenberg’s prediction.
+Other word orders like VSO or OSV are more mixed and don’t follow the pattern as clearly, which shows it’s not a strict rule but more of a tendency.
+I believe the only way to explain why they go together would require more data and evidence as a correlation is not enough.
 '''
 
 # ======================================================
 # Part 3 — Is It Really a Pattern? The Sampling Problem
 # ======================================================
 print("=======\nPart 3\n=======")
-
 
 '''
 Is this pattern about language — or about the sample?
@@ -270,7 +268,6 @@ This connects to E-language vs I-language because WALS is really measuring E-lan
 print("=======\nPart 4\n=======")
 
 '''
-
 Task:
 1. Choose a WALS feature from the [WALS feature list](https://wals.info/feature) that interests you.
 2. Load its data (copy the URL pattern from the code above).
@@ -286,21 +283,19 @@ Some ideas:
 
 
 Before writing any code, answer these questions in the text cell below:
-
 *   Which feature did you choose and why?
 *   What do you predict you'll find?
 *   If you're doing Option B, what linguistic theory or intuition motivates your prediction?
 
-Your prediction here:
-
-I chose Feature 27A (Reduplication) because I find it interesting how languages repeat parts of words or words to express meaning. I predict that most languages will have some form of reduplication, since it’s a common morphological process used across languages.
+I chose Feature 27A (Reduplication) because I find it interesting how languages repeat parts of words or words to express meaning. 
+I predict that most languages will have some form of reduplication, since it’s a common morphological process used across languages.
 '''
 
-# Hint: to load a different feature, change the number in the URL:
-# url = "https://wals.info/feature/27A.tab"   ← replace 86A with your feature
+# To load a different feature, change the number in the URL:
+# url = "https://wals.info/feature/27A.tab" <- replace 86A with my feature
 
 # Step 1: Load the data
-url_your_feature = "https://wals.info/feature/27A.tab"   # ← replace XYZ
+url_your_feature = "https://wals.info/feature/27A.tab"   # <- replace XYZ
 data_your_feature = pd.read_csv(url_your_feature, delimiter='\t', skiprows=6)
 
 # Step 2: Explore it
