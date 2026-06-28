@@ -6,6 +6,7 @@ This lab explores how Python can be used to identify and extract morphological p
 
 Derivational morphology is the study of how words are formed through the addition of affixes.
 In Python, these are expressed with regular expressions (regex) and the 're' module.
+
 '''
 
 import re
@@ -38,7 +39,6 @@ words = [
 print("=======\nPart 1\n=======")
 
 '''
-Matching words starting with 'un-':
 
 To find words that begin with the prefix 'un-', we can use regex: '^un\w+'
 -   '^': This is an anchor that asserts the position at the start of the string.
@@ -48,13 +48,11 @@ To find words that begin with the prefix 'un-', we can use regex: '^un\w+'
     So, '\w+' matches one or more word characters following 'un'.
 '''
 
-# Example usage -- using the "list comprehension" way
-
+# Example usage -- Matching words starting with 'un-':
 un_prefix_words = [x for x in words if re.match(r'^un\w+', x)]
 
 # Alternative method using for loops:
 un_prefix_words_v2 = []
-
 for w in words:
   if re.match(r'^un\w+', w):
     un_prefix_words_v2.append(w)
@@ -64,10 +62,8 @@ for w in words:
 print(f"Words starting with 'un-': {un_prefix_words}")
 print(f"\nWords starting with 'un-' version 2: {un_prefix_words}")
 
-# Step 1: Retrieve all of the "un-" prefixed words in the Brown corpus
-# Step 2: Store them in the variable brown_un_words.
-# Step 3: Output will show the first 20 un-words below.
 
+# Retrieving all of the "un-" prefixed words:
 brown_all_words = nltk.corpus.brown.words()                                              # get all the words in the Brown corpus as a list                                  
 brown_un_words = [word for word in brown_all_words if re.match(r'^un\w+', word)]         # list comprehension to find all the words that start with 'un-' & store them in brown_un_words  
 print(brown_un_words[:20])                                                               # print the first 20 un-words in the Brown corpus
@@ -80,8 +76,6 @@ print(brown_un_words[:20])                                                      
 print("=======\nPart 2\n=======")
 
 '''
-Matching words ending with '-ation':
-
 To find words that end with the suffix '-ation', we can use the regular expression '\w+ation$'.
 
 *   '\w+': This is a **character class** and a **quantifier** combination. 
@@ -93,16 +87,12 @@ To find words that end with the suffix '-ation', we can use the regular expressi
     It ensures that 'ation' is at the very end of the word.
 '''
 
+# Example usage -- Matching words ending with '-ation':
 ation_suffix_words = [word for word in words if re.search(r'\w+ation$', word)]
 print(f"Words ending with '-ation': {ation_suffix_words}")
 
-"""
-Matching words ending with '-ness':
 
-TODO: Write a code to find a list of all the words that end in '-ness' in the Brown corpus, 
-and use a print statement to show the first 20 words, alphabetically.
-"""
-
+# Matching words ending with '-ness' in the Brown corpus:
 ness_suffix_words = [word for word in brown_all_words if re.search(r'\w+ness$', word)]
 ness_suffix_words.sort() # alphabetically sorted
 
@@ -133,6 +123,7 @@ we can modify our previous regex pattern to include capturing groups: '^(un)(\w+
 *   '$': Asserts the position at the end of the string.
 '''
 
+# Extracting base word and 'un-' prefix:
 un_extracted = []
 for word in brown_all_words:
     match = re.match(r'^(un)(\w+)$', word)
@@ -141,19 +132,16 @@ for word in brown_all_words:
 
 print(f"Extracted 'un-' prefix and base words: {un_extracted}")
 
-"""
-Extracting base word and '-ness' suffix:
 
-TODO: Write a code to extract all the bases of words with a '-ness' suffix. Print out the last 20 bases in the list.
-"""
-
+# Extracting base word and '-ness' suffix:
 ness_extracted = []
 for word in brown_all_words:
     match = re.match(r'^(\w+)(ness)$', word)
     if match:
         ness_extracted.append({'word': word, 'suffix': match.group(2), 'base': match.group(1)})
 
-print(f"Extracted '-ness' suffix and base words: {ness_extracted}")
+print(f"Extracted '-ness' suffix and base words: {ness_extracted}") 
+print(f"Last 20 bases with '-ness' suffix: {[base['base'] for base in ness_extracted[-20:]]}")
 
 
 # =============================================
@@ -174,7 +162,7 @@ Some possible questions to investigate:
 - Are there any bases which are found in both categories?
 '''
 
-# -er affix analysis of the words in the brown corpus
+# -er affix analysis:
 er_extracted = []
 for word in brown_all_words:
     match = re.match(r'^(\w+)(er)$', word)
@@ -183,14 +171,12 @@ for word in brown_all_words:
 
 print(f"Extracted '-er' suffix and base words: {er_extracted}")
 
-# Token count for each affix
+# Token count for each affix:
 er_tokens = len(er_extracted)
 ness_tokens = len(ness_extracted)
 un_tokens = len(un_extracted)
 
-# Simple unique base count 
-# creating sets of the base words for each affix to find unique base types and avoid duplicates
-# for loops to extract the base words from the lists
+# Unique base types for each affix:
 er_unique_bases = set([base['base'] for base in er_extracted]) 
 ness_unique_bases = set([base['base'] for base in ness_extracted])
 un_unique_bases = set([base['base'] for base in un_extracted])
