@@ -39,7 +39,6 @@ words = [
 print("=======\nPart 1\n=======")
 
 '''
-
 To find words that begin with the prefix 'un-', we can use regex: '^un\w+'
 -   '^': This is an anchor that asserts the position at the start of the string.
 -   'un': These are literal characters that match the sequence 'un' exactly.
@@ -192,6 +191,7 @@ print(f"Unique base types for 'un-': {un_unique_bases}")
 # =============================================
 # Part 5 - Findings report
 # =============================================
+
 '''
 Tokens for '-er': 28515
 Tokens for '-ness': 1442
