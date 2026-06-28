@@ -47,21 +47,24 @@ Pick 3 column names from df.columns and write a one-sentence guess about what ea
 # ======================================================
 print("=======\nPart 2\n=======") 
 
-
-df["Outcome"].value_counts()
+print("Outcome counts:")
+print(df["Outcome"].value_counts())
 
 # What proportion does each outcome represent?
-df["Outcome"].value_counts(normalize=True).round(3)
+print("\nOutcome proportions:")
+print(df["Outcome"].value_counts(normalize=True).round(3))
 
 # Does the underlying consonant matter?
-pd.crosstab(df["underlying_final"], df["Outcome"], normalize="index").round(3)
+print("\nOutcome by underlying final consonant:")
+print(pd.crosstab(df["underlying_final"], df["Outcome"], normalize="index").round(3))
 
 # Notice: glottalization is almost exclusively a /t/ phenomenon. Why might that be?
 
 # Create a cross-tabulation of 'Outcome' by 'sylls' (mono vs. poly). Use 'normalize="index"'.  
 # Which syllable type has more deletion?
 
-pd.crosstab(df["sylls"], df["Outcome"], normalize="index").round(3)
+print("\nOutcome by syllable type:")
+print(pd.crosstab(df["sylls"], df["Outcome"], normalize="index").round(3))
 
 '''
 Interpretation:
@@ -69,7 +72,6 @@ Interpretation:
 Monosyllabic words tend to have more deletion than polysyllabic words.
 This may be because shorter words tend to be more common?
 '''
-
 
 # ======================================================
 # Part 3 — Following Context
@@ -79,8 +81,10 @@ print("=======\nPart 3\n=======")
 # One of the strongest effects on /t,d/ realization is whether another word follows immediately or there's a pause.
 
 # Simplify pause into two categories
-df["pause"] = df["following_pause"].apply(lambda x: "pause" if x != "NaN" else "no_pause")
-pd.crosstab(df["pause"], df["Outcome"], normalize="index").round(3)
+df["pause"] = df["following_pause"].apply(lambda x: "no_pause" if pd.isna(x) else "pause")
+
+print("\nOutcome by following context:")
+print(pd.crosstab(df["pause"], df["Outcome"], normalize="index").round(3))
 
 # Before another word, tapping dominates (64%). Before a pause, it nearly disappears (1.5%) — replaced by glottalization and released variants. 
 # Why? Because tapping is a coarticulatory process that requires another word to follow, while glottalization and release are more common in final position.
@@ -109,11 +113,13 @@ print("=======\nPart 4\n=======")
 # Words that are more frequent or predictable tend to be reduced — shorter, with more deletion/tapping. (Recall Bell et al., 1999 from Weeks 8–9.)
 
 # Average word duration by outcome
-df.groupby("Outcome")["word_duration"].mean().round(4)
+print("Average word duration by outcome:")
+print(df.groupby("Outcome")["word_duration"].mean().round(4))
 
 # Average language model probability by outcome
 # (less negative = more probable)
-df.groupby("Outcome")["logWordLmProb"].mean().round(4)
+print("\nAverage language model probability by outcome:")
+print(df.groupby("Outcome")["logWordLmProb"].mean().round(4))
 
 # Deleted words are shortest and most probable. Released words are longest and least probable. This fits the prediction: more predictable → more reduction.
 
@@ -132,15 +138,14 @@ The 'SUBTLWF' column has raw word frequency (some values are "NA").
     (c) Is this consistent with the language model results above?
 '''
 
-df["SUBTLWF"] = pd.to_numeric(df["SUBTLWF"], errors="coerce")
-df.groupby("Outcome")["SUBTLWF"].mean().round(2)
+print("\nAverage SUBTLWF frequency by outcome:")
+print(df.groupby("Outcome")["SUBTLWF"].mean().round(2))
 
 '''
 Interpretation:
 It seems like words that are deleted or tapped tend to have a higher frequency. 
 This is consistent with the language model results: more frequent and predictable words are reduced more in speech.
 '''
-
 
 # ======================================================
 # Part 5 — Speaker Variation
