@@ -172,7 +172,7 @@ def plot_cond_probs(cfd, words, genres, title="Conditional Probability by Genre"
     x = np.arange(n_words)
     width = 0.8 / n_genres
     colours = ['#065A82', '#0D9488', '#B85042', '#F5A623',
-               '#6B3FA0', '#2E7D32', '#795548', '#0288D1']
+               "#6B3FA0", '#2E7D32', '#795548', '#0288D1']
 
     fig, ax = plt.subplots(figsize=(10, 4.5))
     for i, genre in enumerate(genres):
@@ -336,11 +336,11 @@ def plot_robot_counts(cfd, genres, title="Robot-related Words by Genre"):
 
     fig, ax = plt.subplots(figsize=(11, 4.5))
 
-    ax.bar(x, counts, color="#7B29D8", alpha=0.85)
+    ax.bar(x, counts, color="#6B3FA0", alpha=0.85)
 
     ax.set_xticks(x)
     ax.set_xticklabels(genres, rotation=45, ha='right')
-    ax.set_ylabel("Count of robot-related words")
+    ax.set_ylabel("Frequency of robot-related terms")
     ax.set_title(title, fontsize=13, fontweight='bold')
 
     ax.spines['top'].set_visible(False)
@@ -357,7 +357,7 @@ def plot_robot_counts(cfd, genres, title="Robot-related Words by Genre"):
 plot_robot_counts(
     cfd_robot,
     genres=brown.categories(),
-    title="Robot-related Words Across Brown Corpus Genres"
+    title="Robot-related Words — Brown Corpus"
 )
 
 '''
