@@ -85,7 +85,57 @@ while cfd_genre itself is a ConditionalFreqDist object that contains separate Fr
 # ======================================================
 print("=======\nPart 2\n=======")
 
+'''
+A conditionalFreqDist store counts, not probabilities. To get P(word | genre) you need to divide by the total number of tokens for that genre — which is fd.N() or equivalently fd.freq(word).
 
+Exercise 2.1 — Compute P(word | genre) for some words
+
+Using the function below, explore the probability of "romance" and "police" in the "news" and "romance" genres. An example usage is given, you can copy/paste and change the word/genre.
+'''
+
+def cond_prob(cfd, condition, event):
+    """
+    Returns P(event | condition) using the given CFD.
+    """
+    return cfd[condition].freq(event)
+
+# Test it — these should be small positive numbers (not zero, not 1)
+print("P('police' | 'news')     =", cond_prob(cfd_genre, 'news', 'police'))
+# Add your tests below
+print("P('romance' | 'news')    =", cond_prob(cfd_genre, 'news', 'romance'))
+print("P('police' | 'romance')  =", cond_prob(cfd_genre, 'romance', 'police'))
+
+'''
+Exercise 2.2 — Build a comparison table
+Use your cond_prob function to fill in the table below. Pick 5 words that you expect to behave differently across genres. One of them should be a function word (like the, a, of) as a baseline.
+
+Choose your genres from: news, romance, humor, government, hobbies, religion, science_fiction, mystery
+'''
+
+# Define your words and genres
+my_words  = ['the', 'love', 'money', 'christmas', 'food']   
+my_genres = ['news', 'romance', 'government', 'religion']     
+
+# Print comparison table
+header = f"{'word':<18}" + "".join(f"{g:<16}" for g in my_genres)
+print(header)
+print("-" * len(header))
+
+for word in my_words:
+    row = f"{word:<18}"
+    for genre in my_genres:
+        p = cond_prob(cfd_genre, genre, word)
+        row += f"{p:<16.6f}"
+    print(row)
+
+
+'''
+Look at the row for your function word. What do you notice about its probability across genres, compared to your content words? 
+What does this tell you about what conditional probability on genre is actually measuring?
+
+This tells us that function words like 'the' have similar probabilities across genres, while content words like 'love', 'money', 'christmas', and 'food' show more variation. 
+This indicates that conditional probability on genre captures contextual differences between genres, as content words are more genre-specific while function words are more universal.
+'''
 
 # ======================================================
 # Part 3 — Tabulating and Plotting 
