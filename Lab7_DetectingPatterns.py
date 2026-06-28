@@ -14,7 +14,6 @@ By the end of this lab you will be able to:
     4. Identify at least one limitation of the data that affects interpretation
 '''
 
-
 # ======================================================
 # Part 1 — From Counts to Questions
 # ======================================================
@@ -46,7 +45,7 @@ data_sov.head()
 
 # Count how many languages use each word order
 order_counts = data_sov['word_order'].value_counts()                            # The '.value_counts()' method tells us the 'frequency' of each word order type across the world's languages.
-print(order_counts)
+print("Word order count:", order_counts)
 
 # Visualize the counts as a bar chart (sorting by count makes it easier to compare):
 fig, ax = plt.subplots(figsize=(9, 5))
