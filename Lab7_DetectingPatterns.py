@@ -2,11 +2,6 @@
 Lab 7 — Detecting Patterns, Testing Theories
 Computational Methods in Linguistics
 
-Corpus data gives us frequencies. But a frequency on its own doesn't tell us whether something is:
-- a 'pattern' -> a systematic tendency in the data.
-- a 'universal' -> something true across all languages.
-- an 'artifact' -> a result of *how* the data was collected, not of language itself.
-
 This lab explores the World Atlas of Language Structures (WALS)(https://wals.info/) as our corpus.  
 WALS is a typological database: instead of recording words or sentences, it records *grammatical features* of the world's languages.
 
@@ -24,12 +19,6 @@ By the end of this lab you will be able to:
 # Part 1 — From Counts to Questions
 # ======================================================
 print("=======\nPart 1\n=======")
-
-'''
-Setup:
-*   pandas  — for organizing and counting data (like a spreadsheet in Python)
-*   matplotlib — for making plots
-'''
 
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -54,13 +43,9 @@ print(f"\nColumn names: {list(data_sov.columns)}")
 print("\nFirst 5 rows:")
 data_sov.head()
 
-'''
-Counting word orders
-Now let's count how often each word order appears. The '.value_counts()' method tells us the 'frequency' of each word order type across the world's languages.
-'''
 
 # Count how many languages use each word order
-order_counts = data_sov['word_order'].value_counts()
+order_counts = data_sov['word_order'].value_counts()                            # The '.value_counts()' method tells us the 'frequency' of each word order type across the world's languages.
 print(order_counts)
 
 # Visualize the counts as a bar chart (sorting by count makes it easier to compare):
@@ -84,27 +69,13 @@ SOV (subject, object, verb) appears the most followed by SVO (subject, verb, obj
 I find it curious that "no dominant order" was third in the classification, this goes against my intuition that all languages have a fixed order.
 '''
 
-
 # ======================================================
 # Part 2 — Conditional Patterns: Do Features Cluster Together?
 # ======================================================
 print("=======\nPart 2\n=======")
 
-
-'''In Week 8, we worked with **conditional frequency distributions**: counts that are broken down by a condition. A key insight was that a pattern in *overall* frequency can hide very different patterns *within* subgroups.
-
-Linguists have long noticed that certain word-order properties tend to *go together* across languages. This is the basis of **typological universals**. One classic example:
-
-> **Greenberg's Universal 4** (1963): "With overwhelmingly greater than chance frequency, languages with normal SOV order are postpositional."
-
-In other words: SOV languages tend to use **postpositions** (like Japanese の *no*), while SVO languages tend to use **prepositions** (like English *of*, *in*, *at*).
-
-Let's test this with WALS data.
-
-**Feature 85A** classifies languages by the order of adposition (preposition/postposition) and noun phrase.
-"""'''
-
-# ── Load WALS Feature 85A: Order of Adposition and Noun Phrase ─────────────
+# Feature 85A classifies languages by the order of adposition (preposition/postposition) and noun phrase.
+# Load WALS Feature 85A: Order of Adposition and Noun Phrase 
 
 url_85A = "https://wals.info/feature/85A.tab"
 data_adp = pd.read_csv(url_85A, delimiter='\t', skiprows=6)
@@ -113,7 +84,7 @@ data_adp = data_adp.rename(columns={'description': 'adposition_type'})
 print("Adposition types in WALS:")
 print(data_adp['adposition_type'].value_counts())
 
-# ── Merge the two datasets ─────────────────────────────────────────────────
+# Merge the two datasets:
 # We join them on 'wals code' — the unique ID for each language.
 # Only languages that appear in BOTH datasets will be kept (inner join).
 
@@ -127,31 +98,30 @@ data_merged = sov_slim.merge(adp_slim, on='wals code')
 print(f"Languages with data for BOTH features: {len(data_merged)}")
 data_merged.head()
 
-"""### The contingency table
+'''
+The contingency table:
 
-A **contingency table** (also called a cross-tabulation) shows us how often each combination of two categories co-occurs. Each cell tells us: *how many languages have word order X and adposition type Y?*
+A contingency table (also called a cross-tabulation) shows us how often each combination of two categories co-occurs. 
+Each cell tells us: *how many languages have word order X and adposition type Y?*
 
 This is our main tool for detecting patterns between two features.
-"""
+'''
 
-# ── Build the contingency table ────────────────────────────────────────────
-
+# Contingency table 
 contingency = pd.crosstab(
     data_merged['word_order'],
     data_merged['adposition_type'],
     margins=True  # adds row/column totals
 )
-
 contingency
 
-"""Raw counts are useful, but they can be misleading when row totals are very different.
-
+'''
+Raw counts are useful, but they can be misleading when row totals are very different.
 For example: if there are 500 SOV languages and only 50 VSO languages, we'd *expect* to see more postpositions in the SOV group just because there are more of them.
-
 To see the *tendency*, we want **proportions within each word order group** — that is, *given that a language is SOV, what fraction use postpositions?*
-"""
+'''
 
-# ── Compute row proportions (conditional probabilities) ────────────────────
+# Compute row proportions (conditional probabilities) 
 # normalize='index' divides each cell by its row total
 # This gives us: P(adposition type | word order)
 
@@ -164,10 +134,10 @@ row_proportions = pd.crosstab(
 print("Proportion of adposition types within each word order group:")
 row_proportions
 
-# ── Visualize the conditional distribution as a stacked bar chart ──────────
-# Each bar = one word order type
-# Each color = one adposition type
-# The length of each color segment = the proportion
+# Visualize the conditional distribution as a stacked bar chart 
+#   Each bar = one word order type
+#   Each color = one adposition type
+#   The length of each color segment = the proportion
 
 # Keep only the three most common adposition types for readability
 cols_to_plot = ['Postpositions', 'Prepositions', 'No dominant order']
@@ -193,20 +163,17 @@ plt.xticks(rotation=30, ha='right')
 plt.tight_layout()
 plt.show()
 
-"""> 🗣️ **Discuss:**
-> - Looking at the chart, does the pattern Greenberg predicted seem to hold? Which word order groups show the strongest tendency?
-> - Are there any word orders that seem to *not* follow the pattern? What might that mean?
-> - This is a *correlation* between two typological features. What would it take to explain *why* they go together?
+'''
+Interpretation:
+*   Looking at the chart, does the pattern Greenberg predicted seem to hold? Which word order groups show the strongest tendency?
+*   Are there any word orders that seem to *not* follow the pattern? What might that mean?
+*   This is a *correlation* between two typological features. What would it take to explain *why* they go together?
 
-> ✏️ **Your answer:** *write here*
-
-SOV languages tend to use postpositions, and SVO languages tend to use prepositions, which matches Greenberg’s prediction.
-
-The strongest patterns are in SOV and SVO. Other word orders like VSO or OSV are more mixed and don’t follow the pattern as clearly, which shows it’s not a strict rule but more of a tendency.
-
-I believe the only way to explain why they go together would require more data and evidence as a correlation is not enough.
-
----
+Answer: 
+*   SOV languages tend to use postpositions, and SVO languages tend to use prepositions, which matches Greenberg’s prediction.
+*   Other word orders like VSO or OSV are more mixed and don’t follow the pattern as clearly, which shows it’s not a strict rule but more of a tendency.
+*   I believe the only way to explain why they go together would require more data and evidence as a correlation is not enough.
+'''
 
 # ======================================================
 # Part 3 — Is It Really a Pattern? The Sampling Problem
@@ -214,18 +181,16 @@ I believe the only way to explain why they go together would require more data a
 print("=======\nPart 3\n=======")
 
 
-Here's a critical question that any good corpus linguist has to ask:
+'''
+Is this pattern about language — or about the sample?
 
-> **Is this pattern about language — or about the sample?**
-
-WALS includes languages from many different **families** (e.g., Indo-European, Sino-Tibetan, Niger-Congo). Languages within the same family are related — they share features because they descended from a common ancestor, not because of any independent tendency.
-
+WALS includes languages from many different 'families'**' (e.g., Indo-European, Sino-Tibetan, Niger-Congo). 
+Languages within the same family are related — they share features because they descended from a common ancestor, not because of any independent tendency.
 If a large family (say, with 100 languages) all happen to share one word order type, they will dominate the counts — even if that pattern isn't representative of language more broadly.
-
 Let's investigate.
-"""
+'''
 
-# ── How many languages per family? ────────────────────────────────────────
+# How many languages per family? 
 # We'll use the word order dataset (81A) which includes family information
 
 languages_per_family = data_sov.groupby('family')['wals code'].count().sort_values(ascending=False)
@@ -236,8 +201,7 @@ print(f"\nTotal families: {len(languages_per_family)}")
 print(f"Median languages per family: {languages_per_family.median():.0f}")
 print(f"Mean languages per family: {languages_per_family.mean():.1f}")
 
-# ── Distribution of family sizes ──────────────────────────────────────────
-
+# Distribution of family sizes 
 fig, ax = plt.subplots(figsize=(8, 4))
 languages_per_family.plot(kind='hist', bins=40, ax=ax, color='steelblue', edgecolor='white')
 ax.set_xlabel("Number of languages in family")
@@ -247,23 +211,23 @@ ax.spines[['top', 'right']].set_visible(False)
 plt.tight_layout()
 plt.show()
 
-"""> 🗣️ **Discuss:**
-> - What shape is this histogram? What does it tell you about how languages are distributed across families?
-> - Most families are represented by just 1–2 languages. A few are represented by many. Why is this a problem for interpreting our word-order counts?
+'''
+Interpretation:
+*   What shape is this histogram? What does it tell you about how languages are distributed across families?
+*   Most families are represented by just 1–2 languages. A few are represented by many. Why is this a problem for interpreting our word-order counts?
 
-> ✏️ **Your answer:** *write here*
+The histogram is right-skewed, this indicates that the language families are mostly represented by 1–2 languages max, while a few families have a lot.
+So the dataset isn’t evenly distributed at all.This is a problem because those big families can dominate the results, for example, 
+if one large family mostly uses SOV, it can make SOV look more common than it actually is across all languages. 
+So the word-order counts doesn't represent a real universal pattern but a family bias.
 
-The histogram is right-skewed, this indicates that the language families are mostly represented by 1–2 languages max, while a few families have a lot. So the dataset isn’t evenly distributed at all.
+Compare: word order counts raw vs. one-language-per-family 
 
-This is a problem because those big families can dominate the results, for example, if one large family mostly uses SOV, it can make SOV look more common than it actually is across all languages. So the word-order counts doesn't represent a real universal pattern but a family bias.
-"""
+One way to reduce family bias: keep only ONE language per family.
+This is a simplified version of what typologists call 'controlling for genealogical bias.'
 
-# ── Compare: word order counts raw vs. one-language-per-family ────────────
-#
-# One way to reduce family bias: keep only ONE language per family.
-# This is a simplified version of what typologists call 'controlling for genealogical bias.'
-#
-# We'll use .drop_duplicates('family') to keep the first language listed per family.
+We'll use .drop_duplicates('family') to keep the first language listed per family.
+'''
 
 data_one_per_family = data_sov.drop_duplicates('family')
 
@@ -278,8 +242,7 @@ comparison = pd.DataFrame({
 
 print(comparison)
 
-# ── Visualize the comparison ───────────────────────────────────────────────
-
+# Visualize the comparison 
 fig, ax = plt.subplots(figsize=(10, 5))
 comparison.sort_values('All languages').plot(kind='barh', ax=ax,
                                               color=['steelblue', 'coral'])
@@ -289,55 +252,52 @@ ax.spines[['top', 'right']].set_visible(False)
 plt.tight_layout()
 plt.show()
 
-"""> 🗣️ **Discuss:**
-> - Do the rankings change when you control for family membership? Which word orders are most affected?
-> - Is dropping to one language per family a perfect solution? What information might we be losing?
-> - How does this connect to the difference between **E-language** and **I-language**? What are we really measuring with WALS?
-
-> ✏️ **Your answer:** *write here*
+'''
+Interpretation:
+*   Do the rankings change when you control for family membership? Which word orders are most affected?
+*   Is dropping to one language per family a perfect solution? What information might we be losing?
+*   How does this connect to the difference between **E-language** and **I-language**? What are we really measuring with WALS?
 
 The rankings do change a bit when we control for family membership, especially for common word orders like SOV and SVO, which usually drop since they were overrepresented in large families.
 Dropping to one language per family isn’t a perfect solution, because we lose a lot of data and variation within each family, so the data output is less detailed.
 
 This connects to E-language vs I-language because WALS is really measuring E-language aka external patterns across languages—rather than what’s going on in an individual speaker’s mind (I-language). So we’re looking at surface distributions, not underlying systems.
-
+'''
 
 # ======================================================
 # Part 4 — Try It Yourself! 
 # ======================================================
 print("=======\nPart 4\n=======")
 
-Now it's your turn to formulate and investigate a small typological question.
+'''
 
-**Your task:**
+Task:
 1. Choose a WALS feature from the [WALS feature list](https://wals.info/feature) that interests you.
 2. Load its data (copy the URL pattern from the code above).
 3. Either:
-   - **Option A:** Describe its distribution (counts + chart) and discuss what it tells us about linguistic diversity.
-   - **Option B:** Merge it with 81A (or 85A) and see whether the two features are conditionally related.
+   - Option A: Describe its distribution (counts + chart) and discuss what it tells us about linguistic diversity.
+   - Option B: Merge it with 81A (or 85A) and see whether the two features are conditionally related.
 
 Some ideas:
-- **Feature 86A** — Order of Genitive and Noun
-- **Feature 87A** — Order of Adjective and Noun
-- **Feature 112A** — Negative Morphemes
-- **Feature 1A** — Consonant Inventories
+- Feature 86A — Order of Genitive and Noun
+- Feature 87A — Order of Adjective and Noun
+- Feature 112A — Negative Morphemes
+- Feature 1A — Consonant Inventories
 
----
 
-**Before writing any code**, answer these questions in the text cell below:
+Before writing any code, answer these questions in the text cell below:
 
-> 📝 Which feature did you choose and why?
-> What do you predict you'll find?
-> If you're doing Option B, what linguistic theory or intuition motivates your prediction?
+*   Which feature did you choose and why?
+*   What do you predict you'll find?
+*   If you're doing Option B, what linguistic theory or intuition motivates your prediction?
 
-**✏️ Your prediction here:**
+Your prediction here:
 
 I chose Feature 27A (Reduplication) because I find it interesting how languages repeat parts of words or words to express meaning. I predict that most languages will have some form of reduplication, since it’s a common morphological process used across languages.
-"""
+'''
 
-# ── Your code here ────────────────────────────────────────────────────────
 # Hint: to load a different feature, change the number in the URL:
-#   url = "https://wals.info/feature/27A.tab"   ← replace 86A with your feature
+# url = "https://wals.info/feature/27A.tab"   ← replace 86A with your feature
 
 # Step 1: Load the data
 url_your_feature = "https://wals.info/feature/27A.tab"   # ← replace XYZ
@@ -353,18 +313,20 @@ plt.xticks(rotation=30)
 plt.tight_layout()
 plt.show()
 
-"""**✏️ What did you find? Does it match your prediction? Note at least one limitation of your analysis.**
+'''
+1. What did you find? Does it match your prediction? Note at least one limitation of your analysis.
 
-I found that most languages have some form of reduplication, either full or partial. This mostly matches my prediction that reduplication is a widespread morphological process across languages. However, one limitation is that WALS only gives a simplified classification, so it doesn’t capture how frequently the reduplications occur or in what contexts reduplication is actually used within each language.
+I found that most languages have some form of reduplication, either full or partial. 
+This mostly matches my prediction that reduplication is a widespread morphological process across languages. 
+However, one limitation is that WALS only gives a simplified classification, 
+so it doesn’t capture how frequently the reduplications occur or in what contexts reduplication is actually used within each language.
 
-Unrelated but I found it interesting that reduplication only occurs in Middle Atlas Tamazight language and not any other Amazigh (Berber) language in North Africa. Either there is not any study on reduplication that was conducted on other Amazigh languages or this specific language variety has different features. I'd like to explore that more
+Unrelated but I found it interesting that reduplication only occurs in Middle Atlas Tamazight language and not any other Amazigh (Berber) language in North Africa. 
+Either there is not any study on reduplication that was conducted on other Amazigh languages or this specific language variety has different features. I'd like to explore that more
 
 ---
-## Wrap-Up: From Patterns to Theories
-
 Here is the chain of reasoning we practiced today:
 
-'''
 Raw data (WALS)
     ↓  count
 Frequency distribution
@@ -374,12 +336,6 @@ Conditional pattern
 Candidate linguistic generalization
     ↓  connect to a theoretical explanation (WHY does this happen?)
 Theory
-'''
 
 Notice that we never reach a *definitive* claim — each step raises new questions. That's normal and healthy in empirical science.
-
-> 🗣️ **Final discussion:**
-> Greenberg's Universal 4 was proposed in 1963 using a sample of just 30 languages. Today, WALS gives us nearly 2,500. Does more data make his claim stronger? Weaker? What else would you want to know?
-
-
-"""
+'''
