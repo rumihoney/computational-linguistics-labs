@@ -38,7 +38,7 @@ words = [
 print("=======\nPart 1\n=======")
 
 '''
-Matching words starting with 'un-'
+Matching words starting with 'un-':
 
 To find words that begin with the prefix 'un-', we can use regex: '^un\w+'
 -   '^': This is an anchor that asserts the position at the start of the string.
@@ -51,8 +51,6 @@ To find words that begin with the prefix 'un-', we can use regex: '^un\w+'
 # Example usage -- using the "list comprehension" way
 
 un_prefix_words = [x for x in words if re.match(r'^un\w+', x)]
-
-# THIS IS WHERE I LEFT OFF -----------------------------------------------------
 
 # Alternative method using for loops:
 un_prefix_words_v2 = []
@@ -82,9 +80,9 @@ print(brown_un_words[:20])                                                      
 print("=======\nPart 2\n=======")
 
 '''
-Matching words ending with '-ation'
+Matching words ending with '-ation':
 
-To find words that end with the suffix '-ation', we can use the regular expression `\w+ation$`.
+To find words that end with the suffix '-ation', we can use the regular expression '\w+ation$'.
 
 *   '\w+': This is a **character class** and a **quantifier** combination. 
     '\w' matches any word character (alphanumeric character and underscore: '[a-zA-Z0-9_]'), 
@@ -98,10 +96,11 @@ To find words that end with the suffix '-ation', we can use the regular expressi
 ation_suffix_words = [word for word in words if re.search(r'\w+ation$', word)]
 print(f"Words ending with '-ation': {ation_suffix_words}")
 
-"""#### ii. Matching words ending with '-ness'
+"""
+Matching words ending with '-ness':
 
-TODO: Now, you write the code to find a list of all the words that end in '-ness' in the Brown corpus, 
-and use a print' statement to show the first 20 words, alphabetically.
+TODO: Write a code to find a list of all the words that end in '-ness' in the Brown corpus, 
+and use a print statement to show the first 20 words, alphabetically.
 """
 
 ness_suffix_words = [word for word in brown_all_words if re.search(r'\w+ness$', word)]
@@ -117,13 +116,16 @@ print(f"Words ending with '-ness': {ness_suffix_words[:20]}")
 print("=======\nPart 3\n=======")
 
 '''
-Capturing groups in regular expressions allow you to extract specific parts of a matched string. They are defined by enclosing the part of the pattern you want to capture within parentheses `()`. When a match is found, the text matched by each capturing group can be retrieved separately.
+Capturing groups in regular expressions allow you to extract specific parts of a matched string. 
+They are defined by enclosing the part of the pattern you want to capture within parentheses '()'. 
+When a match is found, the text matched by each capturing group can be retrieved separately.
 
 This is particularly useful in morphological analysis for separating affixes from base words, enabling a more granular examination of word structure.
 
-#### i. Extracting 'un-' prefix and base word
+Extracting 'un-' prefix and base word:
 
-To extract the 'un-' prefix and the base word from words starting with 'un-', we can modify our previous regex pattern to include capturing groups: `^(un)(\w+)$`.
+To extract the 'un-' prefix and the base word from words starting with 'un-', 
+we can modify our previous regex pattern to include capturing groups: '^(un)(\w+)$'.
 
 *   '^': Asserts the position at the start of the string.
 *   '(un)': This is the **first capturing group**. It matches the literal sequence 'un' and captures it.
@@ -139,12 +141,12 @@ for word in brown_all_words:
 
 print(f"Extracted 'un-' prefix and base words: {un_extracted}")
 
-"""#### ii. Extracting base word and '-ness' suffix
+"""
+Extracting base word and '-ness' suffix:
 
-TODO: Now, in the code cell below, write code to extract all the bases of words with a '-ness' suffix. Print out the last 20 bases in the list.
+TODO: Write a code to extract all the bases of words with a '-ness' suffix. Print out the last 20 bases in the list.
 """
 
-# Your code here.
 ness_extracted = []
 for word in brown_all_words:
     match = re.match(r'^(\w+)(ness)$', word)
@@ -171,8 +173,6 @@ Some possible questions to investigate:
 - How long is the average base in the synthetic vs analytic category?
 - Are there any bases which are found in both categories?
 '''
-
-# Your code here
 
 # -er affix analysis of the words in the brown corpus
 er_extracted = []
